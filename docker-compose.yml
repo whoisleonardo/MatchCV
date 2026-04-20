@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  cassandra:
+    image: cassandra:latest
+    container_name: matchcv-cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MatchCV_Cluster
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=256M
+    volumes:
+      - matchcv_cassandra_data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  matchcv_cassandra_data:
+    name: matchcv_cassandra_data
