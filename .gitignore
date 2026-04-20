@@ -1,0 +1,11 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Docker local config
+docker-compose.yml
+docker-compose.*.yml
+
+# macOS
+.DS_Store
