@@ -1,6 +1,7 @@
 package com.matchcv.controller;
 
 import com.matchcv.dto.api.*;
+import org.springframework.web.bind.annotation.PatchMapping;
 import com.matchcv.model.*;
 import com.matchcv.service.ProfileService;
 import jakarta.validation.Valid;
@@ -18,6 +19,18 @@ import java.util.UUID;
 public class ProfileController {
 
     private final ProfileService profileService;
+
+    // ── Me ───────────────────────────────────────────────────────────────────
+
+    @GetMapping("/me")
+    public UserProfileResponse getMe(Authentication auth) {
+        return UserProfileResponse.from(profileService.getUserProfile(userId(auth)));
+    }
+
+    @PatchMapping("/me")
+    public UserProfileResponse updateMe(@RequestBody ProfileUpdateRequest request, Authentication auth) {
+        return UserProfileResponse.from(profileService.updateUserProfile(userId(auth), request));
+    }
 
     // ── Experience ────────────────────────────────────────────────────────────
 

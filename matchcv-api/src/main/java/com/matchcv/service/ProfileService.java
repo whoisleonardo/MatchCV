@@ -4,12 +4,16 @@ import com.datastax.oss.driver.api.core.uuid.Uuids;
 import com.matchcv.dto.api.CertificationRequest;
 import com.matchcv.dto.api.EducationRequest;
 import com.matchcv.dto.api.ExperienceRequest;
+import com.matchcv.dto.api.ProfileUpdateRequest;
 import com.matchcv.dto.api.ProjectRequest;
 import com.matchcv.model.*;
 import com.matchcv.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,10 +21,29 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProfileService {
 
+    private final UserProfileRepository userProfileRepository;
     private final UserExperienceRepository experienceRepository;
     private final UserEducationRepository educationRepository;
     private final UserCertificationRepository certificationRepository;
     private final UserProjectRepository projectRepository;
+
+    public UserProfile getUserProfile(UUID userId) {
+        return userProfileRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
+
+    public UserProfile updateUserProfile(UUID userId, ProfileUpdateRequest req) {
+        UserProfile profile = getUserProfile(userId);
+        if (req.fullName() != null)  profile.setFullName(req.fullName());
+        if (req.title() != null)     profile.setTitle(req.title());
+        if (req.phone() != null)     profile.setPhone(req.phone());
+        if (req.location() != null)  profile.setLocation(req.location());
+        if (req.linkedin() != null)  profile.setLinkedin(req.linkedin());
+        if (req.summary() != null)   profile.setSummary(req.summary());
+        if (req.skills() != null)    profile.setSkills(req.skills());
+        profile.setUpdatedAt(Instant.now());
+        return userProfileRepository.save(profile);
+    }
 
     // ── Experience ────────────────────────────────────────────────────────────
 

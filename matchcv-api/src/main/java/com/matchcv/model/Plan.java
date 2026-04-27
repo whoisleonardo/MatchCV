@@ -1,5 +1,7 @@
 package com.matchcv.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum Plan {
 
     FREE(1, 3, true),
@@ -15,6 +17,9 @@ public enum Plan {
         this.maxMonthlyGenerations = maxMonthlyGenerations;
         this.watermark = watermark;
     }
+
+    @JsonValue
+    public String toJson() { return name(); }
 
     public int getMaxProfiles()            { return maxProfiles; }
     public int getMaxMonthlyGenerations()  { return maxMonthlyGenerations; }

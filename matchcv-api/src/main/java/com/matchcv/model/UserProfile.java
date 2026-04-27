@@ -65,6 +65,14 @@ public class UserProfile {
     @Column("password_hash")
     private String passwordHash;
 
+    @JsonIgnore
+    @Column("oauth_provider")
+    private String oauthProvider;
+
+    @JsonIgnore
+    @Column("oauth_sub")
+    private String oauthSub;
+
     @Column("created_at")
     private Instant createdAt;
 

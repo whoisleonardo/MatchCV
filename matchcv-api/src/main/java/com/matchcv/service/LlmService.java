@@ -56,13 +56,12 @@ public class LlmService {
 
     public LlmService(
             @Value("${llm.api-url}") String apiUrl,
-            @Value("${llm.model-name}") String model,
-            ObjectMapper objectMapper) {
+            @Value("${llm.model-name}") String model) {
         this.restClient = RestClient.builder()
                 .baseUrl(apiUrl)
                 .build();
         this.model = model;
-        this.objectMapper = objectMapper;
+        this.objectMapper = new ObjectMapper();
     }
 
     public OptimizedCvResponse optimizeCv(OptimizeCvRequest request) {
